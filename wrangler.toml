@@ -1,0 +1,12 @@
+name = "url-shortener"
+main = "worker/index.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "URL_STORE"
+id = "439cc3f6e5cf4a7e886cb6e3e68790bf"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "url_shortener_db"
+database_id = "2bd29d7a-7117-4c2b-a5aa-5ee0ff624010"

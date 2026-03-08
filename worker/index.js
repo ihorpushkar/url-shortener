@@ -1,4 +1,8 @@
-const ALLOWED_ORIGINS = ['http://localhost:5173', 'https://snip.dev']
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://snip.dev',
+]
 const ALLOWED_METHODS = 'GET, POST, OPTIONS'
 
 function getCorsHeaders(origin) {
