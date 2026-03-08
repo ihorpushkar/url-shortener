@@ -86,7 +86,7 @@ export default function ShortenForm({ onShortened }) {
               <input
                 type="text"
                 className="terminal-input-url"
-                placeholder="your-very-long-url.com/with/path?and=params"
+                placeholder="paste URL here"
                 value={url}
                 onChange={(e) => {
                   setUrl(e.target.value);
@@ -224,9 +224,11 @@ export default function ShortenForm({ onShortened }) {
           gap: 6px;
           font-family: "Syne", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
           font-weight: 800;
-          font-size: clamp(36px, 7vw, 54px);
-          letter-spacing: 0.18em;
+          font-size: 72px;
+          letter-spacing: -3px;
           text-transform: uppercase;
+          width: auto;
+          max-width: max-content;
         }
 
         .shorten-title-text {
@@ -648,6 +650,10 @@ export default function ShortenForm({ onShortened }) {
             align-items: flex-start;
           }
 
+          .shorten-title {
+            font-size: 52px;
+          }
+
           .shorten-badge {
             align-items: flex-start;
           }
@@ -659,8 +665,7 @@ export default function ShortenForm({ onShortened }) {
 
         @media (max-width: 480px) {
           .shorten-title {
-            font-size: clamp(28px, 7vw, 34px);
-            letter-spacing: 0.14em;
+            font-size: 36px;
           }
 
           .shorten-terminal-card {

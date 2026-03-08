@@ -28,7 +28,7 @@ export default function StatsPanel({ initialCode }) {
       {/* TOP SECTION - title */}
       <header className="analytics-hero animate-in" style={{ animationDelay: "0ms" }}>
         <div className="analytics-title">
-          <span className="analytics-title-text">АНАЛІТИКА_</span>
+          <span className="analytics-title-text">ANALYTICS_</span>
           <span className="analytics-cursor" />
         </div>
         <p className="analytics-subtitle">
@@ -580,8 +580,26 @@ export default function StatsPanel({ initialCode }) {
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
+          /* Tablet: title & layout */
+          .analytics-title {
+            font-size: 52px;
+          }
+
+          .analytics-wrapper {
+            padding-bottom: 32px;
+          }
+
+          /* Tablet: stats grid 2 columns */
           .metrics-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .terminal-card {
+            width: 100%;
+          }
+
+          .terminal-body {
+            padding-inline: 20px;
           }
 
           .terminal-prompt {
@@ -600,12 +618,38 @@ export default function StatsPanel({ initialCode }) {
         }
 
         @media (max-width: 480px) {
+          /* Mobile: compact title */
           .analytics-title {
-            letter-spacing: 0.08em;
+            font-size: 36px;
+            letter-spacing: -2px;
+          }
+
+          .analytics-wrapper {
+            padding-bottom: 24px;
+          }
+
+          /* Mobile: terminal full width & stacked input */
+          .terminal-card {
+            width: 100%;
           }
 
           .terminal-body {
-            padding-inline: 12px;
+            padding: 16px;
+          }
+
+          .terminal-prompt {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+          }
+
+          .terminal-execute-btn {
+            margin-left: 0;
+          }
+
+          /* Mobile: stats cards stacked */
+          .metrics-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
