@@ -49,337 +49,643 @@ export default function ShortenForm({ onShortened }) {
     setResult(null);
     setError(null);
   };
-
   return (
-    <div className="form-wrapper">
-      <div className="hero">
-        <h1>Скороти<br /><em>будь-який</em> URL</h1>
-        <p className="subtitle">Cloudflare KV · миттєво · безкоштовно</p>
-      </div>
+    <div className="shorten-wrapper">
+      {/* TITLE SECTION */}
+      <header className="shorten-hero animate-in" style={{ animationDelay: "0ms" }}>
+        <div className="shorten-hero-main">
+          <div className="shorten-title">
+            <span className="shorten-title-text">SHORTEN_</span>
+            <span className="shorten-cursor" />
+          </div>
+          <p className="shorten-subtitle">
+            url-shortener@cloudflare:~/workers
+          </p>
+        </div>
+        <div className="shorten-badge">
+          <span>FAST</span>
+          <span>FREE</span>
+          <span>CLOUDFLARE</span>
+        </div>
+      </header>
 
-      {!result ? (
-        <div className="card">
-          <div className="input-row">
-            <div className={`input-wrap ${error ? "has-error" : ""}`}>
-              <span className="input-prefix">https://</span>
+      {/* INPUT SECTION - terminal window */}
+      {!result && (
+        <section className="shorten-terminal-card animate-in" style={{ animationDelay: "100ms" }}>
+          <div className="terminal-header">
+            <span className="terminal-dot red" />
+            <span className="terminal-dot amber" />
+            <span className="terminal-dot green" />
+            <span className="terminal-label">snip@dev:~/shorten</span>
+          </div>
+
+          <div className="terminal-body">
+            <div className={`terminal-line ${error ? "has-error" : ""}`}>
+              <span className="prompt-symbol">$</span>
+              <span className="prompt-path"> https://</span>
               <input
                 type="text"
+                className="terminal-input-url"
                 placeholder="your-very-long-url.com/with/path?and=params"
                 value={url}
-                onChange={(e) => { setUrl(e.target.value); setError(null); }}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setError(null);
+                }}
                 onKeyDown={(e) => e.key === "Enter" && handleShorten()}
-                className="url-input"
               />
+              <button
+                className="terminal-short-btn"
+                onClick={handleShorten}
+                disabled={loading}
+              >
+                {loading ? <span className="terminal-spinner" /> : "SHORTEN →"}
+              </button>
             </div>
-            <button
-              className={`shorten-btn ${loading ? "loading" : ""}`}
-              onClick={handleShorten}
-              disabled={loading}
-            >
-              {loading ? <span className="spinner" /> : "Скоротити →"}
-            </button>
+
+            {error && (
+              <div className="terminal-error-line">
+                <span className="error-prefix">✗ ERROR:</span>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <div className="terminal-hints">
+              <span className="hint">↵ ENTER to execute</span>
+              <span className="hint">expects full URL with protocol</span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* RESULT SECTION - terminal output */}
+      {result && (
+        <section className="result-terminal animate-in" style={{ animationDelay: "150ms" }}>
+          <div className="result-header">
+            <span className="result-prefix">$</span>
+            <span className="result-command"> snip shorten</span>
           </div>
 
-          {error && (
-            <div className="error-msg">
-              <span>⚠</span> {error}
-            </div>
-          )}
-
-          <div className="hints">
-            <span className="hint">↵ Enter для відправки</span>
-            <span className="hint">Підтримує будь-який https:// URL</span>
-          </div>
-        </div>
-      ) : (
-        <div className="card result-card">
-          <div className="result-label">Готово!</div>
-
-          <div className="result-url-block">
-            <span className="result-url">{result.shortUrl}</span>
-            <button className={`copy-btn ${copied ? "copied" : ""}`} onClick={handleCopy}>
-              {copied ? "✓ Скопійовано" : "Копіювати"}
-            </button>
+          <div className="result-success-line">
+            <span className="success-icon">✓</span>
+            <span className="success-text">SUCCESS</span>
           </div>
 
-          <div className="result-meta">
-            <div className="meta-item">
-              <span className="meta-label">Оригінал</span>
-              <span className="meta-value truncate">{url}</span>
+          <div className="result-short-url">
+            <span className="short-label">SHORT URL</span>
+            <div className="short-url-row">
+              <span className="short-url">{result.shortUrl}</span>
+              <button
+                className={`copy-btn ${copied ? "copied" : ""}`}
+                onClick={handleCopy}
+              >
+                {copied ? "COPIED" : "COPY"}
+              </button>
             </div>
-            <div className="meta-item">
-              <span className="meta-label">Код</span>
-              <span className="meta-value mono">{result.shortCode}</span>
+          </div>
+
+          <div className="result-logs">
+            <div className="result-log-line">
+              <span className="log-prefix">&gt;</span>
+              <span className="log-label"> ORIGINAL:</span>
+              <span className="log-value truncate">{url}</span>
+            </div>
+            <div className="result-log-line">
+              <span className="log-prefix">&gt;</span>
+              <span className="log-label"> CODE:</span>
+              <span className="log-value mono">{result.shortCode}</span>
+            </div>
+            <div className="result-log-line">
+              <span className="log-prefix">&gt;</span>
+              <span className="log-label"> EXPIRES:</span>
+              <span className="log-value mono">90 days</span>
             </div>
           </div>
 
           <div className="result-actions">
-            <a href={`/stats/${result.shortCode}`} className="stats-link">
-              Переглянути статистику →
+            <a
+              href={`/stats/${result.shortCode}`}
+              className="terminal-action-btn secondary"
+            >
+              $ stats --code {result.shortCode}
             </a>
-            <button className="reset-btn" onClick={handleReset}>
-              + Скоротити ще
+            <button
+              className="terminal-action-btn"
+              onClick={handleReset}
+            >
+              + new URL
             </button>
           </div>
-        </div>
+        </section>
       )}
-
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-        .form-wrapper { padding-bottom: 40px; }
-
-        .hero { margin-bottom: 40px; }
-
-        .hero h1 {
-          font-size: clamp(42px, 8vw, 64px);
-          font-weight: 800;
-          line-height: 1.05;
-          letter-spacing: -2px;
-          color: var(--text);
+        .shorten-wrapper {
+          padding-bottom: 40px;
         }
 
-        .hero h1 em {
-          font-style: normal;
-          color: var(--accent);
-          position: relative;
+        /* Shared fade-in animation */
+        .animate-in {
+          opacity: 0;
+          transform: translateY(8px);
+          animation: fadeInUp 0.35s ease forwards;
         }
 
-        .subtitle {
-          margin-top: 12px;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 12px;
-          color: var(--muted);
-          letter-spacing: 0.5px;
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
-        .card {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 24px;
-        }
-
-        .input-row {
+        /* TITLE SECTION */
+        .shorten-hero {
           display: flex;
-          gap: 10px;
-          align-items: stretch;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 24px;
+          margin-bottom: 28px;
         }
 
-        .input-wrap {
-          flex: 1;
+        .shorten-hero-main {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .shorten-title {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-family: "Syne", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+          font-weight: 800;
+          font-size: clamp(36px, 7vw, 54px);
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        .shorten-title-text {
+          color: var(--accent);
+        }
+
+        .shorten-cursor {
+          width: 0.8ch;
+          height: 1.1em;
+          background: var(--accent2);
+          display: inline-block;
+          transform: translateY(1px);
+          animation: cursorBlink 1s steps(2, start) infinite;
+        }
+
+        @keyframes cursorBlink {
+          0%, 50% { opacity: 1; }
+          50.01%, 100% { opacity: 0; }
+        }
+
+        .shorten-subtitle {
+          margin-top: 6px;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 12px;
+          letter-spacing: 0.14em;
+          text-transform: lowercase;
+          color: var(--muted);
+        }
+
+        .shorten-badge {
+          font-family: "JetBrains Mono", monospace;
+          font-size: 10px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: var(--muted);
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4px;
+        }
+
+        .shorten-badge span {
+          opacity: 0.7;
+        }
+
+        /* TERMINAL CARD */
+        .shorten-terminal-card {
+          background: radial-gradient(circle at top left, #161616 0, var(--surface) 40%, #050505 100%);
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+          overflow: hidden;
+          margin-bottom: 24px;
+        }
+
+        .terminal-header {
           display: flex;
           align-items: center;
-          background: var(--surface2);
-          border: 1.5px solid var(--border);
-          border-radius: 8px;
-          overflow: hidden;
-          transition: border-color 0.15s;
+          gap: 6px;
+          padding: 10px 14px;
+          background: linear-gradient(90deg, #050505, #101010);
+          border-bottom: 1px solid #181818;
         }
 
-        .input-wrap:focus-within { border-color: var(--accent); }
-        .input-wrap.has-error { border-color: #ff4444; }
+        .terminal-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+        }
+        .terminal-dot.red { background: #ff5c57; }
+        .terminal-dot.amber { background: #fdbb2d; }
+        .terminal-dot.green { background: #21c55d; }
 
-        .input-prefix {
-          padding: 0 10px 0 14px;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 12px;
+        .terminal-label {
+          margin-left: 8px;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 11px;
+          color: var(--muted);
+        }
+
+        .terminal-body {
+          padding: 16px 18px 16px;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 13px;
+          color: var(--text);
+        }
+
+        .terminal-line {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 0;
+          border-bottom: 1px solid transparent;
+        }
+
+        .terminal-line.has-error {
+          border-bottom-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .prompt-symbol {
+          color: var(--accent2);
+        }
+
+        .prompt-path {
           color: var(--muted);
           white-space: nowrap;
-          user-select: none;
         }
 
-        .url-input {
+        .terminal-input-url {
           flex: 1;
-          background: transparent;
           border: none;
           outline: none;
+          background: transparent;
           color: var(--text);
-          font-family: 'JetBrains Mono', monospace;
+          font-family: "JetBrains Mono", monospace;
           font-size: 13px;
-          padding: 14px 14px 14px 0;
+          padding: 4px 4px;
           min-width: 0;
         }
 
-        .url-input::placeholder { color: #444; }
+        .terminal-input-url::placeholder {
+          color: #444;
+        }
 
-        .shorten-btn {
-          background: var(--accent);
-          color: #0a0a0a;
-          border: none;
-          border-radius: 8px;
-          padding: 0 20px;
-          font-family: 'Syne', sans-serif;
-          font-size: 14px;
-          font-weight: 700;
+        .terminal-short-btn {
+          border: 1px solid var(--accent2);
+          background: transparent;
+          color: var(--accent2);
+          font-family: "JetBrains Mono", monospace;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 8px 14px;
+          border-radius: 999px;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
           white-space: nowrap;
-          transition: all 0.15s;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          min-width: 130px;
-          justify-content: center;
+          transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .shorten-btn:hover:not(:disabled) { background: #d9ff4a; transform: translateY(-1px); }
-        .shorten-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .shorten-btn.loading { background: var(--surface2); color: var(--muted); }
+        .terminal-short-btn::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            120deg,
+            rgba(200, 241, 53, 0.18),
+            transparent 40%,
+            transparent 60%,
+            rgba(241, 200, 53, 0.2)
+          );
+          transform: translateX(-120%);
+          transition: transform 0.3s ease;
+          pointer-events: none;
+        }
 
-        .spinner {
-          width: 16px; height: 16px;
-          border: 2px solid #444;
-          border-top-color: var(--accent);
-          border-radius: 50%;
+        .terminal-short-btn:hover:not(:disabled) {
+          background: var(--accent2);
+          color: #000;
+          transform: translateY(-1px);
+          box-shadow: 0 0 0 1px rgba(200, 241, 53, 0.3), 0 16px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-short-btn:hover::before {
+          transform: translateX(130%);
+        }
+
+        .terminal-short-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          box-shadow: none;
+        }
+
+        .terminal-spinner {
+          width: 14px;
+          height: 14px;
+          border-radius: 999px;
+          border: 2px solid #333;
+          border-top-color: var(--accent2);
           animation: spin 0.7s linear infinite;
-          display: inline-block;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
 
-        .error-msg {
+        .terminal-error-line {
           margin-top: 10px;
-          font-size: 13px;
-          color: #ff6b6b;
           display: flex;
+          gap: 8px;
           align-items: center;
-          gap: 6px;
+          font-size: 12px;
+          color: #f97373;
         }
 
-        .hints {
-          margin-top: 14px;
+        .error-prefix {
+          font-weight: 600;
+        }
+
+        .terminal-hints {
+          margin-top: 12px;
           display: flex;
           gap: 16px;
+          flex-wrap: wrap;
         }
 
         .hint {
-          font-family: 'JetBrains Mono', monospace;
+          font-family: "JetBrains Mono", monospace;
           font-size: 11px;
           color: #444;
         }
 
-        /* Result card */
-        .result-card { animation: slideUp 0.3s ease; }
-
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(12px); }
-          to   { opacity: 1; transform: translateY(0); }
+        /* RESULT TERMINAL */
+        .result-terminal {
+          margin-top: 10px;
+          background: radial-gradient(circle at top left, #161616 0, var(--surface2) 35%, #050505 100%);
+          border-radius: 12px;
+          border: 1px solid var(--border);
+          padding: 16px 18px 18px;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 13px;
+          color: var(--text);
+          animation-name: slideUpResult, fadeInUp;
+          animation-duration: 0.35s, 0.35s;
+          animation-timing-function: ease, ease;
+          animation-fill-mode: forwards, forwards;
         }
 
-        .result-label {
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: var(--accent);
-          margin-bottom: 16px;
+        @keyframes slideUpResult {
+          from {
+            transform: translateY(14px);
+          }
+          to {
+            transform: translateY(0);
+          }
         }
 
-        .result-url-block {
+        .result-header {
           display: flex;
           align-items: center;
-          gap: 12px;
-          background: var(--surface2);
-          border: 1px solid var(--border);
-          border-radius: 8px;
-          padding: 14px 16px;
-          margin-bottom: 20px;
+          gap: 4px;
+          margin-bottom: 10px;
         }
 
-        .result-url {
+        .result-prefix {
+          color: var(--accent2);
+        }
+
+        .result-command {
+          color: var(--muted);
+        }
+
+        .result-success-line {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #4ade80;
+          font-weight: 500;
+          margin-bottom: 14px;
+        }
+
+        .success-icon {
+          font-size: 14px;
+        }
+
+        .success-text {
+          letter-spacing: 0.18em;
+          font-size: 11px;
+        }
+
+        .result-short-url {
+          margin-bottom: 14px;
+        }
+
+        .short-label {
+          display: block;
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 6px;
+        }
+
+        .short-url-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          background: rgba(10, 10, 10, 0.9);
+          border: 1px solid var(--border);
+        }
+
+        .short-url {
           flex: 1;
-          font-family: 'JetBrains Mono', monospace;
           font-size: 15px;
           font-weight: 500;
           color: var(--accent);
-          letter-spacing: -0.3px;
+          word-break: break-all;
         }
 
         .copy-btn {
-          background: var(--accent);
+          background: var(--accent2);
           color: #0a0a0a;
           border: none;
           border-radius: 6px;
           padding: 8px 14px;
-          font-family: 'Syne', sans-serif;
-          font-size: 12px;
+          font-family: "Syne", sans-serif;
+          font-size: 11px;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.15s;
           white-space: nowrap;
         }
 
-        .copy-btn.copied { background: #4ade80; }
-        .copy-btn:hover:not(.copied) { background: #d9ff4a; }
+        .copy-btn:hover:not(.copied) {
+          background: #e9ff6c;
+        }
 
-        .result-meta {
+        .copy-btn.copied {
+          background: #4ade80;
+          color: #022c22;
+        }
+
+        .result-logs {
+          margin-top: 4px;
+          margin-bottom: 16px;
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          margin-bottom: 20px;
+          gap: 4px;
         }
 
-        .meta-item { display: flex; gap: 12px; align-items: baseline; }
+        .result-log-line {
+          display: flex;
+          gap: 6px;
+          align-items: baseline;
+          font-size: 12px;
+        }
 
-        .meta-label {
-          font-size: 11px;
-          font-weight: 700;
+        .log-prefix {
           color: var(--muted);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          min-width: 60px;
         }
 
-        .meta-value {
-          font-size: 13px;
-          color: #aaa;
+        .log-label {
+          color: var(--muted);
         }
 
-        .meta-value.truncate {
+        .log-value {
+          color: #d4d4d4;
+        }
+
+        .log-value.mono {
+          font-family: "JetBrains Mono", monospace;
+          color: var(--accent2);
+        }
+
+        .log-value.truncate {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          max-width: 400px;
+          max-width: 100%;
         }
-
-        .meta-value.mono { font-family: 'JetBrains Mono', monospace; color: var(--text); }
 
         .result-actions {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-top: 16px;
-          border-top: 1px solid var(--border);
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 4px;
         }
 
-        .stats-link {
-          font-size: 13px;
-          color: var(--accent);
-          text-decoration: none;
-          font-weight: 700;
-        }
-
-        .stats-link:hover { text-decoration: underline; }
-
-        .reset-btn {
+        .terminal-action-btn {
+          border-radius: 999px;
+          border: 1px solid var(--accent2);
           background: transparent;
-          border: 1px solid var(--border);
-          color: var(--muted);
-          border-radius: 6px;
-          padding: 8px 14px;
-          font-family: 'Syne', sans-serif;
-          font-size: 12px;
-          font-weight: 700;
+          color: var(--accent2);
+          padding: 8px 16px;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 11px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
           cursor: pointer;
-          transition: all 0.15s;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .reset-btn:hover { border-color: var(--text); color: var(--text); }
+        .terminal-action-btn.secondary {
+          border-color: var(--border);
+          color: var(--muted);
+          background: rgba(10, 10, 10, 0.8);
+        }
+
+        .terminal-action-btn:hover {
+          background: var(--accent2);
+          color: #000;
+          transform: translateY(-1px);
+          box-shadow: 0 0 0 1px rgba(200, 241, 53, 0.3), 0 16px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-action-btn.secondary:hover {
+          background: rgba(200, 241, 53, 0.1);
+          color: var(--accent2);
+          box-shadow: none;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+          .shorten-hero {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .shorten-badge {
+            align-items: flex-start;
+          }
+
+          .terminal-body {
+            padding-inline: 14px;
+          }
+        }
 
         @media (max-width: 480px) {
-          .input-row { flex-direction: column; }
-          .shorten-btn { padding: 14px; }
-          .result-url-block { flex-direction: column; align-items: stretch; }
+          .shorten-title {
+            font-size: clamp(28px, 7vw, 34px);
+            letter-spacing: 0.14em;
+          }
+
+          .shorten-terminal-card {
+            margin-bottom: 18px;
+          }
+
+          .terminal-line {
+            flex-wrap: wrap;
+            align-items: flex-start;
+          }
+
+          .terminal-short-btn {
+            margin-left: auto;
+            margin-top: 8px;
+          }
+
+          .short-url-row {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .result-actions {
+            flex-direction: column;
+            align-items: stretch;
+          }
         }
       `}</style>
     </div>
