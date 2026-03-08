@@ -31,9 +31,6 @@ export default function StatsPanel({ initialCode }) {
           <span className="analytics-title-text">ANALYTICS_</span>
           <span className="analytics-cursor" />
         </div>
-        <p className="analytics-subtitle">
-          Кліки · Країни · Лінія часу
-        </p>
       </header>
 
       {/* INPUT SECTION - terminal line */}
@@ -178,6 +175,9 @@ export default function StatsPanel({ initialCode }) {
         /* TOP SECTION */
         .analytics-hero {
           margin-bottom: 32px;
+          max-width: 680px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .analytics-title {
@@ -185,10 +185,12 @@ export default function StatsPanel({ initialCode }) {
           align-items: center;
           gap: 4px;
           font-family: "Syne", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-          font-size: clamp(40px, 7vw, 60px);
+          font-size: clamp(40px, 8vw, 72px);
           font-weight: 800;
-          letter-spacing: 0.12em;
+          letter-spacing: -3px;
           text-transform: uppercase;
+          width: auto;
+          max-width: 100%;
         }
 
         .analytics-title-text {
@@ -209,21 +211,11 @@ export default function StatsPanel({ initialCode }) {
           50.01%, 100% { opacity: 0; }
         }
 
-        .analytics-subtitle {
-          margin-top: 10px;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 12px;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: var(--muted);
-        }
-
         /* TERMINAL CARD */
         .terminal-card {
-          background: radial-gradient(circle at top left, #161616 0, var(--surface) 40%, #050505 100%);
+          background: var(--surface);
           border-radius: 12px;
           border: 1px solid var(--border);
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
           overflow: hidden;
           margin-bottom: 24px;
         }
@@ -231,30 +223,30 @@ export default function StatsPanel({ initialCode }) {
         .terminal-header {
           display: flex;
           align-items: center;
-          gap: 6px;
-          padding: 10px 14px;
+          gap: 8px;
+          padding: 12px 16px;
           background: linear-gradient(90deg, #050505, #101010);
           border-bottom: 1px solid #181818;
-        }
-
-        .terminal-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 999px;
-        }
-        .terminal-dot.red { background: #ff5c57; }
-        .terminal-dot.amber { background: #fdbb2d; }
-        .terminal-dot.green { background: #21c55d; }
-
-        .terminal-label {
-          margin-left: 8px;
           font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
+          font-size: 13px;
           color: var(--muted);
         }
 
+        .terminal-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 999px;
+        }
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.amber { background: #ffbd2e; }
+        .terminal-dot.green { background: #28ca41; }
+
+        .terminal-label {
+          margin-left: 6px;
+        }
+
         .terminal-body {
-          padding: 16px 18px 18px;
+          padding: 20px;
           font-family: "JetBrains Mono", monospace;
           font-size: 13px;
           color: var(--text);
@@ -282,70 +274,42 @@ export default function StatsPanel({ initialCode }) {
           background: transparent;
           color: var(--text);
           font-family: "JetBrains Mono", monospace;
-          font-size: 13px;
+          font-size: 14px;
           padding: 6px 4px;
-          border-bottom: 1px solid transparent;
+          min-width: 0;
         }
 
         .terminal-input::placeholder {
           color: #444;
         }
 
-        .terminal-input:focus {
-          border-bottom-color: var(--accent2);
-        }
-
         .terminal-execute-btn {
-          border: 1px solid var(--accent2);
+          border: 1.5px solid var(--accent);
           background: transparent;
-          color: var(--accent2);
+          color: var(--accent);
           font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
-          letter-spacing: 0.12em;
+          font-size: 13px;
+          font-weight: 700;
           text-transform: uppercase;
-          padding: 8px 14px;
-          border-radius: 999px;
+          padding: 12px 20px;
+          border-radius: 8px;
           cursor: pointer;
-          position: relative;
-          overflow: hidden;
-          transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
           display: inline-flex;
           align-items: center;
           gap: 6px;
           white-space: nowrap;
-        }
-
-        .terminal-execute-btn::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            120deg,
-            rgba(200, 241, 53, 0.15),
-            transparent 40%,
-            transparent 60%,
-            rgba(241, 200, 53, 0.2)
-          );
-          transform: translateX(-100%);
-          transition: transform 0.28s ease;
-          pointer-events: none;
+          transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
         }
 
         .terminal-execute-btn:hover:not(:disabled) {
-          background: var(--accent2);
-          color: #000;
+          background: var(--accent);
+          color: #0a0a0a;
           transform: translateY(-1px);
-          box-shadow: 0 0 0 1px rgba(200, 241, 53, 0.3), 0 16px 30px rgba(0, 0, 0, 0.8);
-        }
-
-        .terminal-execute-btn:hover::before {
-          transform: translateX(120%);
         }
 
         .terminal-execute-btn:disabled {
           opacity: 0.6;
           cursor: not-allowed;
-          box-shadow: none;
         }
 
         .terminal-spinner {
@@ -581,8 +545,14 @@ export default function StatsPanel({ initialCode }) {
         /* RESPONSIVE */
         @media (max-width: 768px) {
           /* Tablet: title & layout */
+          .analytics-hero {
+            max-width: 680px;
+            margin-inline: auto;
+          }
+
           .analytics-title {
             font-size: 52px;
+            letter-spacing: -3px;
           }
 
           .analytics-wrapper {
@@ -599,7 +569,7 @@ export default function StatsPanel({ initialCode }) {
           }
 
           .terminal-body {
-            padding-inline: 20px;
+            padding: 20px;
           }
 
           .terminal-prompt {
@@ -621,7 +591,7 @@ export default function StatsPanel({ initialCode }) {
           /* Mobile: compact title */
           .analytics-title {
             font-size: 36px;
-            letter-spacing: -2px;
+            letter-spacing: -3px;
           }
 
           .analytics-wrapper {
@@ -644,6 +614,8 @@ export default function StatsPanel({ initialCode }) {
           }
 
           .terminal-execute-btn {
+            width: 100%;
+            justify-content: center;
             margin-left: 0;
           }
 

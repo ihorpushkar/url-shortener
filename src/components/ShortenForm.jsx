@@ -62,11 +62,6 @@ export default function ShortenForm({ onShortened }) {
             url-shortener@cloudflare:~/workers
           </p>
         </div>
-        <div className="shorten-badge">
-          <span>FAST</span>
-          <span>FREE</span>
-          <span>CLOUDFLARE</span>
-        </div>
       </header>
 
       {/* INPUT SECTION - terminal window */}
@@ -206,10 +201,13 @@ export default function ShortenForm({ onShortened }) {
         /* TITLE SECTION */
         .shorten-hero {
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
           align-items: flex-start;
           gap: 24px;
           margin-bottom: 28px;
+          max-width: 680px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .shorten-hero-main {
@@ -224,11 +222,11 @@ export default function ShortenForm({ onShortened }) {
           gap: 6px;
           font-family: "Syne", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
           font-weight: 800;
-          font-size: 72px;
+          font-size: clamp(40px, 8vw, 72px);
           letter-spacing: -3px;
           text-transform: uppercase;
           width: auto;
-          max-width: max-content;
+          max-width: 100%;
         }
 
         .shorten-title-text {
@@ -252,34 +250,15 @@ export default function ShortenForm({ onShortened }) {
         .shorten-subtitle {
           margin-top: 6px;
           font-family: "JetBrains Mono", monospace;
-          font-size: 12px;
-          letter-spacing: 0.14em;
-          text-transform: lowercase;
+          font-size: 13px;
           color: var(--muted);
-        }
-
-        .shorten-badge {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 10px;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: var(--muted);
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 4px;
-        }
-
-        .shorten-badge span {
-          opacity: 0.7;
         }
 
         /* TERMINAL CARD */
         .shorten-terminal-card {
-          background: radial-gradient(circle at top left, #161616 0, var(--surface) 40%, #050505 100%);
+          background: var(--surface);
           border-radius: 12px;
           border: 1px solid var(--border);
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
           overflow: hidden;
           margin-bottom: 24px;
         }
@@ -287,30 +266,30 @@ export default function ShortenForm({ onShortened }) {
         .terminal-header {
           display: flex;
           align-items: center;
-          gap: 6px;
-          padding: 10px 14px;
+          gap: 8px;
+          padding: 12px 16px;
           background: linear-gradient(90deg, #050505, #101010);
           border-bottom: 1px solid #181818;
-        }
-
-        .terminal-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 999px;
-        }
-        .terminal-dot.red { background: #ff5c57; }
-        .terminal-dot.amber { background: #fdbb2d; }
-        .terminal-dot.green { background: #21c55d; }
-
-        .terminal-label {
-          margin-left: 8px;
           font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
+          font-size: 13px;
           color: var(--muted);
         }
 
+        .terminal-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 999px;
+        }
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.amber { background: #ffbd2e; }
+        .terminal-dot.green { background: #28ca41; }
+
+        .terminal-label {
+          margin-left: 6px;
+        }
+
         .terminal-body {
-          padding: 16px 18px 16px;
+          padding: 20px;
           font-family: "JetBrains Mono", monospace;
           font-size: 13px;
           color: var(--text);
@@ -321,11 +300,10 @@ export default function ShortenForm({ onShortened }) {
           align-items: center;
           gap: 8px;
           padding: 6px 0;
-          border-bottom: 1px solid transparent;
         }
 
         .terminal-line.has-error {
-          border-bottom-color: rgba(239, 68, 68, 0.5);
+          border-bottom: 1px solid rgba(239, 68, 68, 0.5);
         }
 
         .prompt-symbol {
@@ -344,7 +322,7 @@ export default function ShortenForm({ onShortened }) {
           background: transparent;
           color: var(--text);
           font-family: "JetBrains Mono", monospace;
-          font-size: 13px;
+          font-size: 14px;
           padding: 4px 4px;
           min-width: 0;
         }
@@ -354,56 +332,32 @@ export default function ShortenForm({ onShortened }) {
         }
 
         .terminal-short-btn {
-          border: 1px solid var(--accent2);
+          border: 1.5px solid var(--accent);
           background: transparent;
-          color: var(--accent2);
+          color: var(--accent);
           font-family: "JetBrains Mono", monospace;
-          font-size: 11px;
-          letter-spacing: 0.12em;
+          font-size: 13px;
+          font-weight: 700;
           text-transform: uppercase;
-          padding: 8px 14px;
-          border-radius: 999px;
+          padding: 12px 20px;
+          border-radius: 8px;
           cursor: pointer;
-          position: relative;
-          overflow: hidden;
           display: inline-flex;
           align-items: center;
           gap: 6px;
           white-space: nowrap;
-          transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .terminal-short-btn::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            120deg,
-            rgba(200, 241, 53, 0.18),
-            transparent 40%,
-            transparent 60%,
-            rgba(241, 200, 53, 0.2)
-          );
-          transform: translateX(-120%);
-          transition: transform 0.3s ease;
-          pointer-events: none;
+          transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
         }
 
         .terminal-short-btn:hover:not(:disabled) {
-          background: var(--accent2);
-          color: #000;
+          background: var(--accent);
+          color: #0a0a0a;
           transform: translateY(-1px);
-          box-shadow: 0 0 0 1px rgba(200, 241, 53, 0.3), 0 16px 30px rgba(0, 0, 0, 0.8);
-        }
-
-        .terminal-short-btn:hover::before {
-          transform: translateX(130%);
         }
 
         .terminal-short-btn:disabled {
           opacity: 0.6;
           cursor: not-allowed;
-          box-shadow: none;
         }
 
         .terminal-spinner {
@@ -652,20 +606,22 @@ export default function ShortenForm({ onShortened }) {
 
           .shorten-title {
             font-size: 52px;
+            letter-spacing: -3px;
           }
 
-          .shorten-badge {
-            align-items: flex-start;
+          .shorten-wrapper {
+            padding-bottom: 32px;
           }
 
           .terminal-body {
-            padding-inline: 14px;
+            padding: 20px;
           }
         }
 
         @media (max-width: 480px) {
           .shorten-title {
             font-size: 36px;
+            letter-spacing: -3px;
           }
 
           .shorten-terminal-card {
@@ -673,12 +629,15 @@ export default function ShortenForm({ onShortened }) {
           }
 
           .terminal-line {
-            flex-wrap: wrap;
+            flex-direction: column;
             align-items: flex-start;
+            gap: 10px;
           }
 
           .terminal-short-btn {
-            margin-left: auto;
+            width: 100%;
+            justify-content: center;
+            margin-left: 0;
             margin-top: 8px;
           }
 
