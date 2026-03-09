@@ -2,8 +2,6 @@
 
 > A fast, minimal URL shortener built with React + Cloudflare Workers. Terminal-style UI, instant redirects, click analytics.
 
-![snip dev preview](./screenshot.png)
-
 ## ✨ Features
 
 - **Shorten any URL** instantly with an 8-character unique code
