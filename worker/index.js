@@ -1,7 +1,6 @@
 const ALLOWED_ORIGINS = [
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'https://snip.dev',
+  "http://localhost:5173",
+  "https://url-shortener-app-1qy.pages.dev"
 ]
 const ALLOWED_METHODS = 'GET, POST, OPTIONS'
 
@@ -116,9 +115,15 @@ async function handleShorten(request, env, corsHeaders) {
 
   const code = await generateUniqueCode(env)
 
-  await env.URL_STORE.put(code, url, {
-    expirationTtl: 60 * 60 * 24 * 90, // 90 days
-  })
+  try {
+    await env.URL_STORE.put(code, url, {
+      expirationTtl: 60 * 60 * 24 * 90, // 90 days
+    })
+    console.log('KV saved successfully:', code)
+  } catch (err) {
+    console.error('KV save error:', err.message)
+    return jsonResponse({ error: 'KV save failed: ' + err.message }, 500, corsHeaders)
+  }
 
   const shortUrl = `https://snip.dev/${code}`
 

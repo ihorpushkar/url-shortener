@@ -5,6 +5,7 @@ compatibility_date = "2024-01-01"
 [[kv_namespaces]]
 binding = "URL_STORE"
 id = "439cc3f6e5cf4a7e886cb6e3e68790bf"
+preview_id = "005c8806c3704d6997c50f4e0dffeaf7"
 
 [[d1_databases]]
 binding = "DB"
