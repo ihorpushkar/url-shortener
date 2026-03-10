@@ -71,7 +71,7 @@ export default function ShortenForm({ onShortened }) {
             <span className="terminal-dot red" />
             <span className="terminal-dot amber" />
             <span className="terminal-dot green" />
-            <span className="terminal-label">snip@dev:~/shorten</span>
+            <span className="terminal-label">worker@cloudflare:~/shorten</span>
           </div>
 
           <div className="terminal-body">

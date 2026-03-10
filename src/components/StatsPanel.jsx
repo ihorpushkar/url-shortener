@@ -39,13 +39,13 @@ export default function StatsPanel({ initialCode }) {
           <span className="terminal-dot red" />
           <span className="terminal-dot amber" />
           <span className="terminal-dot green" />
-          <span className="terminal-label">snip@dev:~/analytics</span>
+          <span className="terminal-label">worker@cloudflare:~/analytics</span>
         </div>
 
         <div className="terminal-body">
           <div className="terminal-prompt">
             <span className="prompt-symbol">$</span>
-            <span className="prompt-path"> snip.dev/</span>
+            <span className="prompt-path"> url-shortener.urlcut01.workers.dev/</span>
             <input
               className="terminal-input"
               placeholder="your_code"
