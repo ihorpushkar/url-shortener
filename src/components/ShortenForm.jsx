@@ -3,7 +3,7 @@ import { useState } from "react";
 // 🔧 Change to your Worker URL after deployment
 const WORKER_URL = import.meta.env.VITE_WORKER_URL || "http://localhost:8787";
 
-export default function ShortenForm({ onShortened }) {
+export default function ShortenForm({ onShortened, onStatsClick }) {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -158,12 +158,12 @@ export default function ShortenForm({ onShortened }) {
           </div>
 
           <div className="result-actions">
-            <a
-              href={`/stats/${result.shortCode}`}
-              className="terminal-action-btn secondary"
-            >
-              $ stats --code {result.shortCode}
-            </a>
+          <button
+            className="terminal-action-btn secondary"
+            onClick={() => onStatsClick?.(result.shortCode)}
+          >
+            $ stats --code {result.shortCode}
+          </button>
             <button
               className="terminal-action-btn"
               onClick={handleReset}

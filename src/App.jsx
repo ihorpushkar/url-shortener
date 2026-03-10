@@ -1,43 +1,60 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, useParams } from "react-router-dom";
 import ShortenForm from "./components/ShortenForm";
 import StatsPanel from "./components/StatsPanel";
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState("shorten");
+function Layout() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [lastCode, setLastCode] = useState(null);
+
+  const isStats = location.pathname.startsWith("/stats");
 
   return (
     <div className="app">
       <div className="noise" />
 
       <header>
-        <div className="logo">
+        <div className="logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
           <span className="logo-icon">⌁</span>
           <span className="logo-text">snip</span>
           <span className="logo-dot">.dev</span>
         </div>
         <nav>
           <button
-            className={`tab-btn ${activeTab === "shorten" ? "active" : ""}`}
-            onClick={() => setActiveTab("shorten")}
+            className={`tab-btn ${!isStats ? "active" : ""}`}
+            onClick={() => navigate("/")}
           >
             Shorten
           </button>
           <button
-            className={`tab-btn ${activeTab === "stats" ? "active" : ""}`}
-            onClick={() => setActiveTab("stats")}
+            className={`tab-btn ${isStats ? "active" : ""}`}
+            onClick={() => navigate(lastCode ? `/stats/${lastCode}` : "/stats")}
           >
-            Stats
+            Analytics
           </button>
         </nav>
       </header>
 
       <main>
-        {activeTab === "shorten" ? (
-          <ShortenForm onShortened={(code) => setLastCode(code)} />
-        ) : (
-          <StatsPanel initialCode={lastCode} />
-        )}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ShortenForm
+                onShortened={(code) => {
+                  setLastCode(code);
+                }}
+                onStatsClick={(code) => {
+                  setLastCode(code);
+                  navigate(`/stats/${code}`);
+                }}
+              />
+            }
+          />
+          <Route path="/stats" element={<StatsPanel initialCode={null} />} />
+          <Route path="/stats/:code" element={<StatsPanelWithCode />} />
+        </Routes>
       </main>
 
       <footer>
@@ -133,5 +150,18 @@ export default function App() {
         }
       `}</style>
     </div>
+  );
+}
+
+function StatsPanelWithCode() {
+  const { code } = useParams();
+  return <StatsPanel initialCode={code} />;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
 }
