@@ -9,12 +9,12 @@ export default function StatsPanel({ initialCode }) {
   const [error, setError] = useState(null);
 
   const fetchStats = async () => {
-    if (!code.trim()) return setError("Введіть короткий код");
+    if (!code.trim()) return setError("Enter a short code");
     setError(null);
     setLoading(true);
     try {
       const res = await fetch(`${WORKER_URL}/api/stats/${code}`);
-      if (!res.ok) throw new Error("Код не знайдено");
+      if (!res.ok) throw new Error("Code not found");
       const data = await res.json();
       setStats(data);
     } catch (e) {
@@ -48,7 +48,7 @@ export default function StatsPanel({ initialCode }) {
             <span className="prompt-path"> snip.dev/</span>
             <input
               className="terminal-input"
-              placeholder="ваш_код"
+              placeholder="your_code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && fetchStats()}
@@ -77,21 +77,21 @@ export default function StatsPanel({ initialCode }) {
           {/* Metric cards */}
           <div className="metrics-grid">
             <div className="metric-card metric-total">
-              <div className="metric-label">Всього кліків</div>
+              <div className="metric-label">Total clicks</div>
               <div className="metric-value">
                 {stats.totalClicks ?? 0}
               </div>
             </div>
 
             <div className="metric-card">
-              <div className="metric-label">Унікальні країни</div>
+              <div className="metric-label">Unique countries</div>
               <div className="metric-value">
                 {stats.uniqueCountries ?? 0}
               </div>
             </div>
 
             <div className="metric-card">
-              <div className="metric-label">Кліки сьогодні</div>
+              <div className="metric-label">Clicks today</div>
               <div className="metric-value">
                 {stats.clicksToday ?? 0}
               </div>
@@ -101,7 +101,7 @@ export default function StatsPanel({ initialCode }) {
           {/* URL DISPLAY */}
           <div className="url-block animate-in" style={{ animationDelay: "250ms" }}>
             <div className="url-header">
-              <span className="url-label">Оригінальний URL</span>
+              <span className="url-label">Original URL</span>
               <span className="url-redirect">→ REDIRECT</span>
             </div>
             <a
@@ -118,7 +118,7 @@ export default function StatsPanel({ initialCode }) {
           {stats.recentClicks?.length > 0 && (
             <div className="recent-block animate-in" style={{ animationDelay: "300ms" }}>
               <div className="recent-header">
-                <span className="recent-title">Останні кліки</span>
+                <span className="recent-title">Recent clicks</span>
               </div>
 
               <div className="recent-table">
