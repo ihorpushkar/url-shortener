@@ -28,8 +28,6 @@
 
 **[url-shortener-app-1qy.pages.dev](https://url-shortener-app-1qy.pages.dev)**
 
-Worker API: `https://url-shortener.urlcut01.workers.dev`
-
 ## 📦 Local Setup
 
 ```bash
