@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-// 🔧 Змініть на ваш Worker URL після деплою
+// 🔧 Change to your Worker URL after deployment
 const WORKER_URL = import.meta.env.VITE_WORKER_URL || "http://localhost:8787";
 
 export default function ShortenForm({ onShortened }) {
@@ -17,8 +17,8 @@ export default function ShortenForm({ onShortened }) {
 
   const handleShorten = async () => {
     setError(null);
-    if (!url.trim()) return setError("Введіть URL");
-    if (!isValidUrl(url)) return setError("Невалідний URL — додайте https://");
+    if (!url.trim()) return setError("Enter a URL");
+    if (!isValidUrl(url)) return setError("Invalid URL — add https://");
 
     setLoading(true);
     try {
@@ -27,12 +27,12 @@ export default function ShortenForm({ onShortened }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       });
-      if (!res.ok) throw new Error("Помилка сервера");
+      if (!res.ok) throw new Error("Server error");
       const data = await res.json();
       setResult(data);
       onShortened?.(data.shortCode);
     } catch (e) {
-      setError(e.message || "Щось пішло не так");
+      setError(e.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
