@@ -1,4 +1,4 @@
-# ⌁ snip.dev — URL Shortener
+# ⌁ URL Shortener
 
 > A fast, minimal URL shortener built with React + Cloudflare Workers. Terminal-style UI, instant redirects, click analytics.
 
@@ -11,6 +11,7 @@
 - **90-day expiry** — links automatically expire after 90 days
 - **Responsive design** — works on mobile, tablet, and desktop
 - **Terminal aesthetic** — hacker-style UI with animations
+- **Client-side routing** — shareable analytics URLs (`/stats/:code`)
 
 ## 🛠 Tech Stack
 
@@ -20,17 +21,20 @@
 | Backend | Cloudflare Workers |
 | Storage | Cloudflare KV (URL mapping) |
 | Database | Cloudflare D1 / SQLite (click analytics) |
+| Routing | React Router v6 |
 | Deploy | Cloudflare Pages + Workers |
 
 ## 🚀 Live Demo
 
 **[url-shortener-app-1qy.pages.dev](https://url-shortener-app-1qy.pages.dev)**
 
+Worker API: `https://url-shortener.urlcut01.workers.dev`
+
 ## 📦 Local Setup
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/url-shortener.git
+git clone https://github.com/ihorpushkar/url-shortener.git
 cd url-shortener
 
 # 2. Install dependencies
@@ -85,10 +89,12 @@ url-shortener/
 │   ├── components/
 │   │   ├── ShortenForm.jsx   # Main URL input + result UI
 │   │   └── StatsPanel.jsx    # Analytics dashboard
-│   ├── App.jsx               # Tab navigation
+│   ├── App.jsx               # React Router + layout
 │   └── main.jsx
 ├── worker/
 │   └── index.js              # Cloudflare Worker (full API)
+├── public/
+│   └── _redirects            # Cloudflare Pages SPA routing
 ├── wrangler.toml             # Cloudflare configuration
 ├── .env.example
 └── package.json
@@ -101,15 +107,15 @@ User enters long URL
         ↓
 Worker generates 8-char code → saves to KV
         ↓
-Returns short URL: snip.dev/abc12345
+Returns short URL: url-shortener.urlcut01.workers.dev/abc12345
         ↓
-Someone visits snip.dev/abc12345
+Someone visits url-shortener.urlcut01.workers.dev/abc12345
         ↓
 Worker reads KV → 301 redirect to original URL
         ↓
 Click logged to D1: { code, timestamp, country }
         ↓
-Analytics available at /analytics
+Analytics available at /stats/:code
 ```
 
 ## 🔌 API Endpoints
@@ -127,7 +133,7 @@ Analytics available at /analytics
 { "url": "https://example.com/very/long/path" }
 
 // Response
-{ "shortCode": "abc12345", "shortUrl": "https://snip.dev/abc12345" }
+{ "shortCode": "abc12345", "shortUrl": "https://url-shortener.urlcut01.workers.dev/abc12345" }
 ```
 
 ### GET /api/stats/:code

@@ -17,8 +17,8 @@ function Layout() {
       <header>
         <div className="logo" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
           <span className="logo-icon">⌁</span>
-          <span className="logo-text">snip</span>
-          <span className="logo-dot">.dev</span>
+          <span className="logo-text">url</span>
+          <span className="logo-dot">.cut</span>
         </div>
         <nav>
           <button
