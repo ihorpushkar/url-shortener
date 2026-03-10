@@ -125,7 +125,7 @@ async function handleShorten(request, env, corsHeaders) {
     return jsonResponse({ error: 'KV save failed: ' + err.message }, 500, corsHeaders)
   }
 
-  const shortUrl = `https://snip.dev/${code}`
+  const shortUrl = `https://url-shortener.urlcut01.workers.dev/${code}`
 
   return jsonResponse({ shortCode: code, shortUrl }, 200, corsHeaders)
 }
